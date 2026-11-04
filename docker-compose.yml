@@ -1,0 +1,19 @@
+services:
+  job-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: job_tracker_fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      - JOB_TRACKER_DEFAULT_MODEL=${JOB_TRACKER_DEFAULT_MODEL:-gemini}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
+    env_file:
+      - .env
+    volumes:
+      # Persist Delta Lake metrics and ingested jobs across restarts
+      - ./data:/app/data
+    restart: unless-stopped
+
